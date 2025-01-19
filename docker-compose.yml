@@ -194,7 +194,7 @@ services:
       dockerfile: Dockerfile
     container_name: ccm-backend
     ports:
-      - '8091:8091'  # Expose backend on port 8091
+      - '80:8091'  # Expose backend on port 8091
     networks:
       - ccm  # Connect to the custom network
     environment:
@@ -202,19 +202,19 @@ services:
     depends_on:
       - kafka
 
-  # Frontend service
-  frontend:
-    build:
-      context: ./frontend/transaction-ui
-      dockerfile: Dockerfile
-    container_name: ccm-frontend
-    ports:
-      - '3000:3000'  # Expose frontend on port 3000
-    environment:
-      - REACT_APP_API_URL=http://backend:8091  # Set the backend API URL for React
-    stdin_open: true
-    networks:
-      - ccm  # Connect to the same custom network
+  # # Frontend service
+  # frontend:
+  #   build:
+  #     context: ./frontend/transaction-ui
+  #     dockerfile: Dockerfile
+  #   container_name: ccm-frontend
+  #   ports:
+  #     - '3000:3000'  # Expose frontend on port 3000
+  #   environment:
+  #     - REACT_APP_API_URL=http://backend:8091  # Set the backend API URL for React
+  #   stdin_open: true
+  #   networks:
+  #     - ccm  # Connect to the same custom network
 
 # Define a custom network for inter-container communication
 networks:
