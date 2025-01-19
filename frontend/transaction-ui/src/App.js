@@ -22,9 +22,10 @@ function App() {
     const handleLogin = async (username) => {
         setLoading(true); // Set loading state to true when API call starts
         setError(null); // Reset error state
-
+        const encodedUser = btoa(username);
+        console.log(encodedUser)
         try {
-            const response = await axios.get(`/api/customer/${username}`);  // API call to get user data
+            const response = await axios.get(`/api/customer/${encodedUser}`);  // API call to get user data
             if (response.data) {
                 const user = response.data;  // Assuming the response contains the user data
                 setLoggedInUser(user); // Set the logged-in user
@@ -52,7 +53,7 @@ function App() {
                 <h1 className="header-title">Credit Card Manager</h1>
                 {loggedInUser && (
                     <div className="user-info">
-                        <span className="username">{loggedInUser.username.toUpperCase()}</span>
+                        <span className="username">{loggedInUser.username}</span>
                         <button onClick={handleLogout} className="logout-button">Logout</button>
                     </div>
                 )}

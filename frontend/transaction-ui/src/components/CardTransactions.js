@@ -4,6 +4,7 @@ import Transaction from './Transaction'; // Import the Transaction component
 import TransactionFilter from './TransactionFilter'; // Import the TransactionFilter component
 import axios from 'axios';
 
+
 const CardTransactions = ({ username, cardNumber, cardType, cardStatus }) => {
     const [transactions, setTransactions] = useState([]); // State to hold transactions
     const [filteredTransactions, setFilteredTransactions] = useState([]);
@@ -15,7 +16,7 @@ const CardTransactions = ({ username, cardNumber, cardType, cardStatus }) => {
     useEffect(() => {
         const fetchTransactions = async () => {
             try {
-                const response = await axios.get(`/api/customer/transactions/${username}`);
+                const response = await axios.get(`/api/customer/transactions/${encodedUser}`);
                 const data = response.data;
                 
                 // Flatten transactions from the response to get all transactions for this user
@@ -32,6 +33,8 @@ const CardTransactions = ({ username, cardNumber, cardType, cardStatus }) => {
 
         fetchTransactions();
     }, [username, cardNumber]); // Run when `username` or `cardNumber` changes
+
+    const encodedUser = btoa(username);
 
     // Function to filter transactions based on selected filter option
     const applyFilter = useCallback(() => {

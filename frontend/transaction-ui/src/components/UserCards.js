@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import Toastify from 'toastify-js';
 import CreditCard from './CreditCard'; // Import CreditCard component
 import Transaction from './Transaction'; // Import Transaction component
@@ -29,14 +29,15 @@ const UserCards = ({ username }) => {
         status: "enabled",
     });
 
+    const encodedUser = btoa(username);
     // Fetch user data and credit card details
       // Function to fetch user data and credit card details
       const fetchUserData = async () => {
         try {
-            const response = await axios.get(`/api/customer/creditcard/${username}`);
+            const response = await axios.get(`/api/customer/creditcard/listcreditcards/${encodedUser}?showFullNumber=true`);
             setUser(response.data); // Store the user data after fetching
             setLoading(false); // Set loading to false once data is fetched
-
+            console.log(response)
             // If user has credit cards, set the next creditCardId
             if (response.data && response.data.creditcards.length > 0) {
                 const latestCardId = Math.max(...response.data.creditcards.map(card => card.creditCardId));
@@ -67,7 +68,7 @@ const UserCards = ({ username }) => {
     const fetchTransactions = async () => {
         setLoadingTransactions(true);
         try {
-            const response = await axios.get(`/api/customer/transactions/lastXTransactions/${username}?limit=10&status=both`);
+            const response = await axios.get(`/api/customer/transactions/lastXTransactions/${encodedUser}?limit=10&status=both`);
             console.log('Transactions Response:', response.data);
 
             const allTransactions = [];
@@ -197,7 +198,7 @@ const handleSubmit = async (e) => {
 
     try {
         // Post the data with the modified creditCardNumber
-        const response = await axios.post(`/api/customer/creditcard/${username}`, formattedCardData);
+        const response = await axios.post(`/api/customer/creditcard/addcreditcard/${encodedUser}`, formattedCardData);
 
         // Show success toast
         Toastify({
